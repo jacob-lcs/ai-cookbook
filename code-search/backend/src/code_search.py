@@ -9,17 +9,18 @@ class CodeSearcher:
         self,
         qdrant: AsyncQdrantClient,
         openai: AsyncOpenAI,
-        embedding_model: str = "text-embedding-3-small",
+        embedding_model: str = "text-embedding-v3",
     ):
         self.qdrant = qdrant
         self.openai = openai
+        self.openai.base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
         self.embedding_model = embedding_model
 
     async def search(
         self, query: str, collection_name: str, limit: int = 5
     ) -> list[dict[str, Any]]:
         embedding_response = await self.openai.embeddings.create(
-            input=query, model=self.embedding_model
+            input=query, model=self.embedding_model, encoding_format="float", dimensions=1024
         )
         embedding = embedding_response.data[0].embedding
 

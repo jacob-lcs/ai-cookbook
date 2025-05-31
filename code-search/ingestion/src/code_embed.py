@@ -31,11 +31,12 @@ def main(argv):
     ds = Dataset.from_pandas(df)
     logging.info(f"Loaded dataset with {len(ds)} records from {FLAGS.input_file}")
 
-    client = OpenAI()
+    client = OpenAI(base_url="https://dashscope.aliyuncs.com/compatible-mode/v1")
     model = FLAGS.model
 
     def create_embeddings(batch: list[str], model: str) -> list[list[float]]:
-        response = client.embeddings.create(input=batch, model=model)
+        response = client.embeddings.create(input=batch, model=model, dimensions=1024,
+    encoding_format="float")
         embeddings = [item.embedding for item in response.data]
         return embeddings
 
@@ -48,7 +49,7 @@ def main(argv):
             "embedding": create_embeddings(batch=x["text"], model=model),
         },
         batched=True,
-        batch_size=32,
+        batch_size=10,
     )
 
     ds.to_parquet(FLAGS.output_file)

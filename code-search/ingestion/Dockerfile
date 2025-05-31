@@ -16,7 +16,7 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy the Python files into the container
-COPY jobs ./jobs
+COPY src ./src
 
 COPY run.sh .
 

@@ -25,7 +25,7 @@ flags.DEFINE_string(
 flags.DEFINE_integer(
     "embedding_dim",
     # 1536 for `text-embedding-3-small` and 3072 for `text-embedding-3-large`
-    default=1536,
+    default=1024,
     help="Embedding dimension",
 )
 
