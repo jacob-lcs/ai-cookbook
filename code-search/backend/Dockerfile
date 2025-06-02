@@ -1,7 +1,7 @@
 FROM node:current as builder
 
 # Clone the demo-code-search repository to use the frontend code
-RUN apt-get update && apt-get install -y git
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources && apt-get update && apt-get install -y git
 RUN git clone https://github.com/qdrant/demo-code-search.git
 
 WORKDIR /demo-code-search/frontend
@@ -18,8 +18,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install the required packages
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip  -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install -r requirements.txt  -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # Copy the Python files into the container
 COPY src ./src
